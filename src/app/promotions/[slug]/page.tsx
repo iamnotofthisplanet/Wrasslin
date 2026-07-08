@@ -18,6 +18,8 @@ import { FollowButton } from "@/components/FollowButton";
 import { SocialLinks } from "@/components/SocialLinks";
 import { RatingStars } from "@/components/ui";
 import { PromotionHub } from "@/components/promotions/PromotionHub";
+import { TiltCard } from "@/components/fx/TiltCard";
+import { KineticText, FadeIn } from "@/components/fx/KineticText";
 import { compactNumber } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -62,13 +64,18 @@ export default async function PromotionPage({ params }: { params: Promise<{ slug
 
         <div className="mx-auto max-w-7xl px-4 pb-8 pt-10 sm:px-6">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end">
-            <PromoEmblem
-              shortName={promotion.shortName}
-              primary={promotion.primary}
-              secondary={promotion.secondary}
-              className="h-28 w-28 shrink-0 glow-soft sm:h-36 sm:w-36"
-              rounded="rounded-3xl"
-            />
+            <TiltCard max={12} scale={1.04} className="shrink-0">
+              <div className="relative">
+                <div className="aura-conic absolute -inset-8 rounded-full opacity-60" aria-hidden />
+                <PromoEmblem
+                  shortName={promotion.shortName}
+                  primary={promotion.primary}
+                  secondary={promotion.secondary}
+                  className="relative h-28 w-28 glow-soft sm:h-36 sm:w-36"
+                  rounded="rounded-3xl"
+                />
+              </div>
+            </TiltCard>
             <div className="flex-1">
               <div className="mb-2 flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface/60 px-3 py-1 text-xs font-bold uppercase tracking-wider text-ash">
@@ -83,8 +90,12 @@ export default async function PromotionPage({ params }: { params: Promise<{ slug
                   </span>
                 )}
               </div>
-              <h1 className="headline text-4xl text-bone sm:text-5xl md:text-6xl">{promotion.name}</h1>
-              <p className="mt-2 text-lg italic text-ash">“{promotion.tagline}”</p>
+              <h1 className="headline text-4xl text-bone sm:text-5xl md:text-6xl">
+                <KineticText text={promotion.name} stagger={0.05} />
+              </h1>
+              <FadeIn delay={0.35} y={14}>
+                <p className="mt-2 text-lg italic text-ash">“{promotion.tagline}”</p>
+              </FadeIn>
               <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-3">
                 <FollowButton promotionId={promotion.id} baseFollowers={promotion.followers} accent={promotion.primary} size="lg" />
                 <RatingStars rating={promotion.rating} className="text-base" />

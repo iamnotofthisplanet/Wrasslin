@@ -31,6 +31,7 @@ import type {
 import { WrestlerCard, EventCard, NewsCard, TitleCard } from "@/components/cards";
 import { VideoCard } from "@/components/VideoCard";
 import { MerchCard } from "@/components/MerchCard";
+import { SpotlightGroup } from "@/components/fx/Spotlight";
 import { CommentSection } from "@/components/CommentSection";
 import { SocialLinks } from "@/components/SocialLinks";
 import { Badge } from "@/components/ui";
@@ -269,11 +270,22 @@ function Roster({ roster }: { roster: Wrestler[] }) {
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        {filtered.map((w) => (
-          <WrestlerCard key={w.id} wrestler={w} />
-        ))}
-      </div>
+      <SpotlightGroup className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <AnimatePresence mode="popLayout">
+          {filtered.map((w, i) => (
+            <motion.div
+              key={w.id}
+              layout
+              initial={{ opacity: 0, y: 24, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: (i % 8) * 0.04 }}
+            >
+              <WrestlerCard wrestler={w} />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </SpotlightGroup>
     </div>
   );
 }
@@ -314,11 +326,11 @@ function Videos({ videos }: { videos: Video[] }) {
   return (
     <div>
       <TabHeading title="Video Library" subtitle="Full matches, highlights, promos and more." />
-      <div className="grid gap-x-5 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
+      <SpotlightGroup className="grid gap-x-5 gap-y-7 sm:grid-cols-2 lg:grid-cols-3">
         {videos.map((v) => (
           <VideoCard key={v.id} video={v} />
         ))}
-      </div>
+      </SpotlightGroup>
     </div>
   );
 }
@@ -405,11 +417,11 @@ function Merch({ merch, promotion }: { merch: MerchItem[]; promotion: Promotion 
           Ships from {promotion.city}
         </span>
       </div>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <SpotlightGroup className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         {merch.map((m) => (
           <MerchCard key={m.id} item={m} />
         ))}
-      </div>
+      </SpotlightGroup>
     </div>
   );
 }

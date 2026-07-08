@@ -2,10 +2,14 @@ import Link from "next/link";
 import { ArrowRight, Flame, MapPin, TrendingUp } from "lucide-react";
 import { Hero } from "@/components/home/Hero";
 import { RegionExplorer } from "@/components/home/RegionExplorer";
-import { PromotionCard } from "@/components/PromotionCard";
+import { ShowcaseRail } from "@/components/home/ShowcaseRail";
 import { EventCard, NewsCard, StorylineCard, WrestlerCard } from "@/components/cards";
 import { SectionHeading } from "@/components/ui";
 import { Reveal } from "@/components/Reveal";
+import { MarqueeBand } from "@/components/fx/MarqueeBand";
+import { SpotlightGroup } from "@/components/fx/Spotlight";
+import { ParallaxY } from "@/components/fx/Parallax";
+import { Magnetic } from "@/components/fx/Magnetic";
 import {
   featuredPromotions,
   upcomingEvents,
@@ -25,41 +29,41 @@ export default function HomePage() {
     <>
       <Hero />
 
-      {/* Featured promotions */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-        <Reveal>
+      <MarqueeBand
+        items={["Live This Week", "Get Your Tickets", "Support Local Wrestling", "Every Territory"]}
+        className="-mt-6"
+      />
+
+      {/* Marquee promotions — pinned horizontal showcase */}
+      <section className="pt-16">
+        <Reveal className="mx-auto max-w-7xl px-4 sm:px-6">
           <SectionHeading
             eyebrow="Marquee Promotions"
-            title={<>The Heavy Hitters</>}
+            index="01"
+            title="The Heavy Hitters"
             action={{ label: "All promotions", href: "/promotions" }}
           />
         </Reveal>
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.slice(0, 3).map((p, i) => (
-            <Reveal key={p.id} delay={i * 80}>
-              <PromotionCard promotion={p} featured />
-            </Reveal>
-          ))}
+        <div className="mt-10">
+          <ShowcaseRail promotions={featured} />
         </div>
       </section>
 
       {/* Discover by region */}
-      <section className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
+      <section className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <Reveal>
           <SectionHeading
             eyebrow="In Your Area & Beyond"
-            title={
-              <span className="inline-flex items-center gap-3">
-                <MapPin className="h-9 w-9 text-crimson" /> Discover by Region
-              </span>
-            }
+            index="02"
+            icon={<MapPin className="h-9 w-9 text-crimson" />}
+            title="Discover by Region"
             accent="var(--color-electric)"
           />
-          <p className="mt-3 max-w-2xl text-ash">
+          <p className="mt-4 max-w-2xl text-ash">
             From the rust belt to the West Coast to across the pond — find the promotions running shows near you.
           </p>
         </Reveal>
-        <Reveal className="mt-8">
+        <Reveal className="mt-8" delay={100}>
           <RegionExplorer />
         </Reveal>
       </section>
@@ -69,44 +73,52 @@ export default function HomePage() {
         <Reveal>
           <SectionHeading
             eyebrow="Don't Miss Out"
+            index="03"
             title="Upcoming Shows"
             action={{ label: "Full calendar", href: "/events" }}
             accent="var(--color-gold)"
           />
         </Reveal>
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <SpotlightGroup className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {upcoming.map((e, i) => (
-            <Reveal key={e.id} delay={i * 60}>
+            <Reveal key={e.id} delay={(i % 3) * 90}>
               <EventCard event={e} />
             </Reveal>
           ))}
-        </div>
+        </SpotlightGroup>
       </section>
 
+      <MarqueeBand
+        items={["Title vs Mask", "The Reaper Comes", "Class War", "60-Minute Iron Man"]}
+        tone="crimson"
+        angle={2}
+        reverse
+      />
+
       {/* Hottest storylines */}
-      <section className="relative overflow-hidden py-16">
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-crimson/5 via-transparent to-transparent" />
+      <section className="relative overflow-hidden py-20">
+        <ParallaxY speed={0.5} className="pointer-events-none absolute -right-40 top-0 -z-10">
+          <div className="h-[34rem] w-[34rem] rounded-full bg-crimson/10 blur-3xl" />
+        </ParallaxY>
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <Reveal>
             <SectionHeading
               eyebrow="Follow The Drama"
-              title={
-                <span className="inline-flex items-center gap-3">
-                  <Flame className="h-9 w-9 text-crimson" /> Hottest Storylines
-                </span>
-              }
+              index="04"
+              icon={<Flame className="h-9 w-9 text-crimson" />}
+              title="Hottest Storylines"
             />
-            <p className="mt-3 max-w-2xl text-ash">
+            <p className="mt-4 max-w-2xl text-ash">
               No more piecing it together from a dozen sources. Every rivalry, every chapter, tracked in one place.
             </p>
           </Reveal>
-          <div className="mt-8 grid gap-5 md:grid-cols-2">
+          <SpotlightGroup className="mt-10 grid gap-5 md:grid-cols-2">
             {storylines.map((s, i) => (
-              <Reveal key={s.id} delay={i * 70}>
+              <Reveal key={s.id} delay={(i % 2) * 100}>
                 <StorylineCard storyline={s} />
               </Reveal>
             ))}
-          </div>
+          </SpotlightGroup>
         </div>
       </section>
 
@@ -115,58 +127,63 @@ export default function HomePage() {
         <Reveal>
           <SectionHeading
             eyebrow="Trending Now"
-            title={
-              <span className="inline-flex items-center gap-3">
-                <TrendingUp className="h-9 w-9 text-mint" /> On The Rise
-              </span>
-            }
+            index="05"
+            icon={<TrendingUp className="h-9 w-9 text-mint" />}
+            title="On The Rise"
             accent="var(--color-mint)"
           />
         </Reveal>
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <SpotlightGroup className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           {rising.map((w, i) => (
-            <Reveal key={w.id} delay={i * 50}>
+            <Reveal key={w.id} delay={i * 60}>
               <WrestlerCard wrestler={w} />
             </Reveal>
           ))}
-        </div>
+        </SpotlightGroup>
       </section>
 
       {/* Latest news */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <Reveal>
-          <SectionHeading eyebrow="The Wire" title="Latest News" action={{ label: "All news", href: "/news" }} />
+          <SectionHeading eyebrow="The Wire" index="06" title="Latest News" action={{ label: "All news", href: "/news" }} />
         </Reveal>
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <SpotlightGroup className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {latest.map((n, i) => (
-            <Reveal key={n.id} delay={i * 60}>
+            <Reveal key={n.id} delay={i * 70}>
               <NewsCard article={n} />
             </Reveal>
           ))}
-        </div>
+        </SpotlightGroup>
       </section>
 
       {/* CTA band */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <Reveal>
-          <div className="relative overflow-hidden rounded-3xl border border-line bg-gradient-to-br from-surface to-ink-2 p-8 text-center sm:p-14">
+          <div className="relative overflow-hidden rounded-[2.5rem] border border-line bg-gradient-to-br from-surface to-ink-2 p-8 text-center sm:p-16" data-sheen>
             <div className="absolute inset-0 -z-10 bg-grid opacity-50 [mask-image:radial-gradient(60%_60%_at_50%_50%,black,transparent)]" />
-            <div className="absolute -right-16 -top-16 -z-10 h-64 w-64 rounded-full bg-crimson/20 blur-3xl" />
-            <div className="absolute -bottom-16 -left-16 -z-10 h-64 w-64 rounded-full bg-electric/20 blur-3xl" />
-            <h2 className="headline mx-auto max-w-3xl text-4xl text-bone sm:text-5xl md:text-6xl">
+            <ParallaxY speed={-0.35} className="absolute -right-16 -top-16 -z-10">
+              <div className="h-72 w-72 rounded-full bg-crimson/20 blur-3xl" />
+            </ParallaxY>
+            <ParallaxY speed={0.35} className="absolute -bottom-16 -left-16 -z-10">
+              <div className="h-72 w-72 rounded-full bg-electric/20 blur-3xl" />
+            </ParallaxY>
+            <h2 className="headline mx-auto max-w-3xl text-4xl text-bone sm:text-6xl">
               Built for the fans who <span className="text-gradient-fire">never miss a show.</span>
             </h2>
-            <p className="mx-auto mt-5 max-w-xl text-ash">
+            <p className="mx-auto mt-6 max-w-xl text-ash">
               Follow your favorite promotions, track storylines, grab tickets, and join the conversation. This is your
               ringside seat to the entire indie scene.
             </p>
-            <Link
-              href="/promotions"
-              className="group mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-crimson to-crimson-deep px-8 py-4 text-base font-bold uppercase tracking-wide text-white shadow-[0_10px_40px_-12px_var(--color-crimson)] transition-transform hover:scale-[1.03]"
-            >
-              Start Exploring
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-            </Link>
+            <Magnetic className="mt-9 inline-block">
+              <Link
+                href="/promotions"
+                data-cursor="GO"
+                className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-crimson to-crimson-deep px-9 py-4.5 text-base font-bold uppercase tracking-wide text-white shadow-[0_10px_50px_-10px_var(--color-crimson)] transition-shadow hover:shadow-[0_16px_70px_-8px_var(--color-crimson)]"
+              >
+                Start Exploring
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Magnetic>
           </div>
         </Reveal>
       </section>

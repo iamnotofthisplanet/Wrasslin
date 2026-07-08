@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Ticket, MapPin, Flame, ArrowRight } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { EventsExplorer } from "@/components/events/EventsExplorer";
+import { Countdown } from "@/components/events/Countdown";
 import { PosterArt } from "@/components/visuals";
 import { Badge } from "@/components/ui";
 import { events, upcomingEvents, getPromotion } from "@/data";
@@ -35,6 +36,8 @@ export default function EventsPage() {
         {next && (
           <Link
             href={promo ? `/promotions/${promo.slug}` : "#"}
+            data-sheen
+            data-cursor="VIEW"
             className="group relative mb-12 block overflow-hidden rounded-3xl border border-line"
           >
             <PosterArt seed={next.id + next.title} accent={next.posterAccent} rounded="rounded-none" className="absolute inset-0 h-full w-full" />
@@ -58,6 +61,7 @@ export default function EventsPage() {
                   </span>
                   <span>{formatDateLong(next.date)} · {formatTime(next.date)}</span>
                 </div>
+                <Countdown to={next.date} className="mt-6" />
               </div>
               <div className="lg:text-right">
                 {main && (

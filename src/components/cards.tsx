@@ -14,7 +14,11 @@ export function EventCard({ event, showPromo = true }: { event: WrestlingEvent; 
   const days = daysUntil(event.date);
 
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-line card-grad transition-all duration-300 hover:-translate-y-1 hover:border-white/20">
+    <div
+      data-sheen
+      data-spot
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-line card-grad transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
+    >
       <div className="relative h-32">
         <PosterArt seed={event.id + event.title} accent={event.posterAccent} rounded="rounded-none" className="h-full" />
         <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent" />
@@ -109,7 +113,8 @@ export function NewsCard({ article, compact = false }: { article: NewsArticle; c
   return (
     <Link
       href={`/news#${article.id}`}
-      className="group flex flex-col gap-3 rounded-2xl border border-line card-grad p-5 transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
+      data-spot
+      className="group relative flex flex-col gap-3 overflow-hidden rounded-2xl border border-line card-grad p-5 transition-all duration-300 hover:-translate-y-1 hover:border-white/20"
     >
       <div className="flex items-center gap-2">
         <Badge tone={newsTone[article.tag]}>{article.tag}</Badge>
@@ -136,6 +141,9 @@ export function WrestlerCard({ wrestler }: { wrestler: Wrestler }) {
   return (
     <Link
       href={`/wrestlers/${wrestler.id}`}
+      data-sheen
+      data-spot
+      data-cursor="VIEW"
       className="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-all duration-300 hover:-translate-y-1.5 hover:border-white/20"
     >
       <div className="relative aspect-[4/5]">
@@ -191,7 +199,7 @@ export function StorylineCard({ storyline }: { storyline: Storyline }) {
   const villains = storyline.antagonists.map(getWrestler).filter(Boolean) as Wrestler[];
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-line card-grad p-5 transition-all duration-300 hover:border-white/20">
+    <div data-spot className="group relative overflow-hidden rounded-2xl border border-line card-grad p-5 transition-all duration-300 hover:border-white/20">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Badge tone={statusTone[storyline.status]}>
@@ -249,7 +257,8 @@ export function TitleCard({ championship }: { championship: Championship }) {
   return (
     <Link
       href={holder ? `/wrestlers/${holder.id}` : "#"}
-      className="group flex items-center gap-4 rounded-2xl border border-line card-grad p-4 transition-all duration-300 hover:border-gold/40"
+      data-sheen
+      className="group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-line card-grad p-4 transition-all duration-300 hover:border-gold/40"
     >
       <div className="relative grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-gradient-to-br from-gold/30 to-gold-deep/20 ring-1 ring-gold/30">
         <Trophy className="h-7 w-7 text-gold gold-glow" />

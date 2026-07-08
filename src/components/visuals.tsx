@@ -32,7 +32,7 @@ export function PromoEmblem({
   const uid = `${shortName}-${(seed % 9999).toString(36)}`;
 
   return (
-    <div className={cn("relative overflow-hidden", rounded, className)} aria-hidden>
+    <div className={cn("relative overflow-hidden", rounded, className)} style={{ containerType: "size" }} aria-hidden>
       <svg viewBox="0 0 100 100" className="h-full w-full" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id={`bg-${uid}`} x1="0" y1="0" x2="1" y2="1" gradientTransform={`rotate(${angle % 45}, 0.5, 0.5)`}>
@@ -61,7 +61,10 @@ export function PromoEmblem({
         />
       </svg>
       <div className="absolute inset-0 grid place-items-center">
-        <span className="font-display text-[clamp(0.9rem,4vw,2.4rem)] leading-none tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+        <span
+          className="font-display leading-none tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]"
+          style={{ fontSize: "min(34cqmin, 6rem)" }}
+        >
           {shortName}
         </span>
       </div>
@@ -103,7 +106,7 @@ export function WrestlerAvatar({
   const ring = alignmentRing[alignment];
 
   return (
-    <div className={cn("relative overflow-hidden", rounded, className)} aria-hidden>
+    <div className={cn("relative overflow-hidden", rounded, className)} style={{ containerType: "size" }} aria-hidden>
       <svg viewBox="0 0 100 120" className="h-full w-full" preserveAspectRatio="xMidYMid slice">
         <defs>
           <linearGradient id={`wa-${uid}`} x1="0" y1="0" x2="0.4" y2="1">
@@ -123,7 +126,10 @@ export function WrestlerAvatar({
         <circle cx="50" cy="40" r="15.5" fill="none" stroke={ring} strokeWidth="2" opacity="0.85" />
       </svg>
       <div className="absolute inset-0 grid place-items-center">
-        <span className="font-display text-[clamp(1rem,5vw,2.6rem)] leading-none text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)]">
+        <span
+          className="font-display leading-none text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)]"
+          style={{ fontSize: "min(19cqmin, 5rem)" }}
+        >
           {initials(name)}
         </span>
       </div>

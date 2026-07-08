@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 /* ============================================================
-   WRASSLIN — Design System
+   WRASSLIN — Design System v2
    A bold, dark, electric aesthetic built for the indies.
+   Motion-first: aurora ambience, kinetic type, cursor optics.
    ============================================================ */
 
 @theme {
@@ -39,12 +40,15 @@
 
   /* Animations */
   --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee-fast: marquee 22s linear infinite;
   --animate-marquee-rev: marquee-rev 40s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 2.8s ease-in-out infinite;
   --animate-shimmer: shimmer 2.5s linear infinite;
   --animate-spin-slow: spin 16s linear infinite;
   --animate-rise: rise 0.7s var(--ease-out-expo) both;
+  --animate-aurora: aurora 26s ease-in-out infinite;
+  --animate-scroll-cue: scroll-cue 2.2s var(--ease-out-expo) infinite;
 }
 
 @keyframes marquee {
@@ -71,6 +75,18 @@
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
 }
+@keyframes aurora {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); filter: hue-rotate(0deg); }
+  33% { transform: translate3d(2%, -3%, 0) scale(1.06); filter: hue-rotate(-9deg); }
+  66% { transform: translate3d(-2%, 2%, 0) scale(1.03); filter: hue-rotate(7deg); }
+}
+@keyframes scroll-cue {
+  0% { transform: translateY(-100%); }
+  55%, 100% { transform: translateY(100%); }
+}
+@keyframes ring-rotate {
+  to { transform: rotate(360deg); }
+}
 
 /* ---------------- Base ---------------- */
 * {
@@ -82,26 +98,35 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Lenis smooth-scroll compat */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
 body {
   background: var(--color-ink);
   color: var(--color-bone);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  /* clip (not hidden) keeps position:sticky working inside the page */
+  overflow-x: clip;
 }
 
-/* Ambient page backdrop — layered radial glows */
+/* Ambient page backdrop — layered radial glows with slow aurora drift */
 body::before {
   content: "";
   position: fixed;
-  inset: 0;
+  inset: -8%;
   z-index: -2;
   background:
-    radial-gradient(60rem 60rem at 12% -10%, rgba(255, 45, 70, 0.13), transparent 60%),
-    radial-gradient(50rem 50rem at 100% 0%, rgba(124, 92, 255, 0.12), transparent 55%),
+    radial-gradient(60rem 60rem at 12% -10%, rgba(255, 45, 70, 0.14), transparent 60%),
+    radial-gradient(50rem 50rem at 100% 0%, rgba(124, 92, 255, 0.13), transparent 55%),
     radial-gradient(70rem 50rem at 50% 120%, rgba(255, 194, 75, 0.07), transparent 60%);
   pointer-events: none;
+  animation: var(--animate-aurora);
+  will-change: transform, filter;
 }
 
 /* Film grain overlay */
@@ -110,7 +135,7 @@ body::after {
   position: fixed;
   inset: 0;
   z-index: -1;
-  opacity: 0.04;
+  opacity: 0.045;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
@@ -118,6 +143,12 @@ body::after {
 ::selection {
   background: var(--color-crimson);
   color: white;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-crimson);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 /* Scrollbar */
@@ -139,6 +170,7 @@ body::after {
   line-height: 0.88;
   letter-spacing: -0.01em;
   text-transform: uppercase;
+  text-wrap: balance;
 }
 
 .text-gradient-fire {
@@ -160,6 +192,10 @@ body::after {
 }
 .text-stroke-crimson {
   -webkit-text-stroke: 1.5px var(--color-crimson);
+  color: transparent;
+}
+.text-stroke-faint {
+  -webkit-text-stroke: 1px rgba(245, 244, 247, 0.22);
   color: transparent;
 }
 
@@ -196,6 +232,22 @@ body::after {
   background: conic-gradient(from 0deg, transparent 0 70%, var(--color-crimson) 85%, var(--color-gold) 100%);
 }
 
+/* Rotating champion aura (placed behind portraits) */
+.aura-conic {
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(255, 194, 75, 0.0) 40deg,
+    rgba(255, 194, 75, 0.35) 90deg,
+    rgba(255, 45, 70, 0.3) 150deg,
+    transparent 220deg,
+    rgba(124, 92, 255, 0.22) 300deg,
+    transparent 360deg
+  );
+  animation: ring-rotate 14s linear infinite;
+  filter: blur(28px);
+}
+
 /* Shimmer skeleton */
 .shimmer {
   background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.03) 75%);
@@ -225,18 +277,103 @@ body::after {
 }
 .link-sweep:hover { background-size: 100% 2px; }
 
-/* Reveal-on-scroll base (toggled by IntersectionObserver via .in-view) */
+/* ---------------- Card optics: sheen sweep + cursor spotlight ---------------- */
+/* Add data-sheen to any relative + overflow-hidden card. */
+[data-sheen]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.05) 46%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(255, 255, 255, 0.05) 54%,
+    transparent 60%
+  );
+  transform: translateX(-130%) skewX(-8deg);
+  transition: transform 0.9s var(--ease-out-expo);
+}
+[data-sheen]:hover::before { transform: translateX(130%) skewX(-8deg); }
+
+/* Add data-spot; a SpotlightGroup ancestor feeds --mx/--my per card. */
+[data-spot]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.09),
+    transparent 65%
+  );
+  transition: opacity 0.4s ease;
+}
+[data-spot]:hover::after { opacity: 1; }
+
+/* ---------------- Custom cursor ---------------- */
+html.cursor-fx, html.cursor-fx * { cursor: none !important; }
+.cursor-dot, .cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  pointer-events: none;
+  border-radius: 9999px;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-crimson);
+  box-shadow: 0 0 12px rgba(255, 45, 70, 0.9);
+}
+.cursor-ring {
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid rgba(245, 244, 247, 0.65);
+  display: grid;
+  place-items: center;
+  mix-blend-mode: difference;
+}
+.cursor-ring span {
+  font-family: var(--font-condensed);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.cursor-ring.has-label span { opacity: 1; }
+
+/* ---------------- Preloader ---------------- */
+.preloader-slash {
+  background: linear-gradient(100deg, var(--color-gold), var(--color-crimson));
+  box-shadow: 0 0 30px rgba(255, 45, 70, 0.7);
+}
+
+/* ---------------- Reveal-on-scroll ---------------- */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
+  transform: translateY(34px);
+  filter: blur(6px);
+  transition:
+    opacity 0.8s var(--ease-out-expo),
+    transform 0.8s var(--ease-out-expo),
+    filter 0.8s var(--ease-out-expo);
 }
 .reveal.in-view {
   opacity: 1;
   transform: none;
+  filter: blur(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
-  .reveal { opacity: 1; transform: none; }
+  .reveal { opacity: 1; transform: none; filter: none; }
+  [data-sheen]::before { display: none; }
 }

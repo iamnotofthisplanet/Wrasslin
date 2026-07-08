@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { NewsArticle } from "@/lib/types";
 import { Badge } from "@/components/ui";
+import { FadeIn } from "@/components/fx/KineticText";
 import { getPromotion } from "@/data";
 import { cn, formatDateLong } from "@/lib/utils";
 
@@ -47,7 +48,8 @@ export function NewsFeed({ articles }: { articles: NewsArticle[] }) {
         {filtered.map((article) => {
           const promo = getPromotion(article.promotionId);
           return (
-            <article key={article.id} id={article.id} className="scroll-mt-28 border-b border-line pb-12 last:border-0">
+            <FadeIn key={article.id} className="border-b border-line pb-12 last:border-0">
+            <article id={article.id} className="scroll-mt-28">
               <div className="mb-3 flex flex-wrap items-center gap-2">
                 <Badge tone={newsTone[article.tag]}>{article.tag}</Badge>
                 {promo && (
@@ -72,6 +74,7 @@ export function NewsFeed({ articles }: { articles: NewsArticle[] }) {
                 ))}
               </div>
             </article>
+            </FadeIn>
           );
         })}
       </div>

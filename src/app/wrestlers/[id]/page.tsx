@@ -13,6 +13,8 @@ import { WrestlerAvatar } from "@/components/visuals";
 import { AlignmentChip, Badge, MomentumBar } from "@/components/ui";
 import { StorylineCard } from "@/components/cards";
 import { SocialLinks } from "@/components/SocialLinks";
+import { TiltCard } from "@/components/fx/TiltCard";
+import { KineticText, FadeIn } from "@/components/fx/KineticText";
 
 export function generateStaticParams() {
   return wrestlers.map((w) => ({ id: w.id }));
@@ -57,16 +59,21 @@ export default async function WrestlerPage({ params }: { params: Promise<{ id: s
           <div className="grid gap-8 lg:grid-cols-[360px_1fr]">
             {/* Portrait */}
             <div>
-              <div className="overflow-hidden rounded-3xl border border-line glow-soft">
-                <WrestlerAvatar
-                  name={wrestler.name}
-                  accent={wrestler.accent}
-                  alignment={wrestler.alignment}
-                  rounded="rounded-none"
-                  className="aspect-[4/5] w-full"
-                  showBadge
-                />
-              </div>
+              <TiltCard max={7} scale={1.01} className="group">
+                <div className="relative">
+                  {titles.length > 0 && <div className="aura-conic absolute -inset-10 rounded-full opacity-70" aria-hidden />}
+                  <div data-sheen className="relative overflow-hidden rounded-3xl border border-line glow-soft">
+                    <WrestlerAvatar
+                      name={wrestler.name}
+                      accent={wrestler.accent}
+                      alignment={wrestler.alignment}
+                      rounded="rounded-none"
+                      className="aspect-[4/5] w-full"
+                      showBadge
+                    />
+                  </div>
+                </div>
+              </TiltCard>
               {wrestler.social && wrestler.social.length > 0 && (
                 <div className="mt-4">
                   <SocialLinks social={wrestler.social} />
@@ -86,15 +93,21 @@ export default async function WrestlerPage({ params }: { params: Promise<{ id: s
               </div>
 
               {wrestler.nickname && (
-                <p className="mt-3 font-display text-2xl" style={{ color: wrestler.accent }}>
-                  “{wrestler.nickname}”
-                </p>
+                <FadeIn delay={0.1} y={12}>
+                  <p className="mt-3 font-display text-2xl" style={{ color: wrestler.accent }}>
+                    “{wrestler.nickname}”
+                  </p>
+                </FadeIn>
               )}
-              <h1 className="headline text-5xl text-bone sm:text-6xl md:text-7xl">{wrestler.name}</h1>
+              <h1 className="headline text-5xl text-bone sm:text-6xl md:text-7xl">
+                <KineticText text={wrestler.name} stagger={0.06} delay={0.15} />
+              </h1>
 
-              <p className="mt-3 inline-flex items-center gap-1.5 text-ash">
-                <MapPin className="h-4 w-4 text-ash-dim" /> {wrestler.hometown}
-              </p>
+              <FadeIn delay={0.4} y={12}>
+                <p className="mt-3 inline-flex items-center gap-1.5 text-ash">
+                  <MapPin className="h-4 w-4 text-ash-dim" /> {wrestler.hometown}
+                </p>
+              </FadeIn>
 
               {wrestler.catchphrase && (
                 <div className="mt-4 inline-flex items-start gap-2 rounded-xl border border-line bg-surface/60 px-4 py-3">

@@ -9,6 +9,9 @@ export function PromotionCard({ promotion, featured = false }: { promotion: Prom
   return (
     <Link
       href={`/promotions/${promotion.slug}`}
+      data-sheen
+      data-spot
+      data-cursor="ENTER"
       className="group relative flex flex-col overflow-hidden rounded-3xl border border-line card-grad transition-all duration-300 hover:-translate-y-1"
       style={{ ["--p" as string]: promotion.primary }}
     >

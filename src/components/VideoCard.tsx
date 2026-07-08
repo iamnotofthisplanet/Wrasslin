@@ -16,8 +16,8 @@ export function VideoCard({ video }: { video: Video }) {
 
   return (
     <>
-      <button onClick={() => setOpen(true)} className="group block w-full text-left">
-        <div className="relative aspect-video overflow-hidden rounded-xl border border-line">
+      <button onClick={() => setOpen(true)} data-cursor="PLAY" className="group block w-full text-left">
+        <div data-sheen className="relative aspect-video overflow-hidden rounded-xl border border-line">
           <PosterArt seed={video.id + video.title} accent={video.accent} rounded="rounded-none" className="h-full w-full transition-transform duration-500 group-hover:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           <div className="absolute inset-0 grid place-items-center">

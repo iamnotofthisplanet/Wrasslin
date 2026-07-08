@@ -12,7 +12,7 @@ export function MerchCard({ item }: { item: MerchItem }) {
   const [added, setAdded] = useState(false);
 
   return (
-    <div className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-white/20">
+    <div data-sheen className="group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-all duration-300 hover:-translate-y-1 hover:border-white/20">
       <div className="relative aspect-square">
         <PosterArt seed={item.id + item.name} accent={item.accent} rounded="rounded-none" className="h-full w-full transition-transform duration-500 group-hover:scale-105" />
         <div className="absolute inset-0 grid place-items-center">

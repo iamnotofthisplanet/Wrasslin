@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from "react";
 import { Search, SlidersHorizontal, X } from "lucide-react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import type { Promotion, Region } from "@/lib/types";
 import { PromotionCard } from "@/components/PromotionCard";
+import { SpotlightGroup } from "@/components/fx/Spotlight";
 import { regions } from "@/data";
 import { cn, slugify } from "@/lib/utils";
 
@@ -144,11 +145,22 @@ export function PromotionsExplorer({
           </button>
         </div>
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((p) => (
-            <PromotionCard key={p.id} promotion={p} />
-          ))}
-        </div>
+        <SpotlightGroup className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence mode="popLayout">
+            {filtered.map((p, i) => (
+              <motion.div
+                key={p.id}
+                layout
+                initial={{ opacity: 0, y: 28, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: (i % 6) * 0.05 }}
+              >
+                <PromotionCard promotion={p} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </SpotlightGroup>
       )}
     </div>
   );

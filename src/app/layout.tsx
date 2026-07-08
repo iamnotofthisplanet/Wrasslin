@@ -4,6 +4,10 @@ import "./globals.css";
 import { StoreProvider } from "@/lib/store";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { SmoothScroll } from "@/components/fx/SmoothScroll";
+import { CustomCursor } from "@/components/fx/CustomCursor";
+import { ScrollProgress } from "@/components/fx/ScrollProgress";
+import { Preloader } from "@/components/fx/Preloader";
 
 const anton = Anton({ weight: "400", subsets: ["latin"], variable: "--font-anton", display: "swap" });
 const oswald = Oswald({ subsets: ["latin"], variable: "--font-oswald", display: "swap" });
@@ -33,9 +37,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={`${anton.variable} ${oswald.variable} ${inter.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
         <StoreProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <SmoothScroll>
+            <Preloader />
+            <ScrollProgress />
+            <CustomCursor />
+            <Navbar />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </SmoothScroll>
         </StoreProvider>
       </body>
     </html>

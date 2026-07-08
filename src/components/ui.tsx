@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { KineticText } from "@/components/fx/KineticText";
 
 /* ---------------- Tag / Badge ---------------- */
 export function Tag({
@@ -56,12 +57,16 @@ export function Badge({
 export function SectionHeading({
   eyebrow,
   title,
+  icon,
+  index,
   action,
   className,
   accent = "var(--color-crimson)",
 }: {
   eyebrow?: string;
   title: React.ReactNode;
+  icon?: React.ReactNode;
+  index?: string;
   action?: { label: string; href: string };
   className?: string;
   accent?: string;
@@ -70,12 +75,20 @@ export function SectionHeading({
     <div className={cn("flex flex-wrap items-end justify-between gap-4", className)}>
       <div>
         {eyebrow && (
-          <div className="mb-2 flex items-center gap-2">
+          <div className="mb-2.5 flex items-center gap-2.5">
             <span className="h-3 w-1.5 rounded-full" style={{ backgroundColor: accent }} />
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-ash">{eyebrow}</span>
+            {index && (
+              <span className="text-xs font-bold tracking-[0.2em] text-ash-dim">
+                — {index}
+              </span>
+            )}
           </div>
         )}
-        <h2 className="headline text-3xl text-bone sm:text-4xl md:text-5xl">{title}</h2>
+        <h2 className="headline flex items-center gap-3 text-3xl text-bone sm:text-4xl md:text-5xl">
+          {icon}
+          {typeof title === "string" ? <KineticText text={title} stagger={0.05} /> : title}
+        </h2>
       </div>
       {action && (
         <Link
